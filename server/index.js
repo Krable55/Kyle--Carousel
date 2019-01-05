@@ -7,7 +7,7 @@ const cors = require('cors');
 const app = express();
 const url = 'mongodb://localhost:27017';
 const client = mongodb.MongoClient;
-const port = normalizePort(process.env.PORT || 3004);
+const port = process.env.PORT || 3004;
 app.use('/', express.static('./client/public/'));
 app.use(/\/\d+\//, express.static('./client/public/'));
 

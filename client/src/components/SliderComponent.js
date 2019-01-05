@@ -21,7 +21,7 @@ class SliderComponent extends React.Component {
 
   //get similar cars for second  carousel
   getSimilarCarsByMake(type, limit) {
-    return fetch(`http://localhost:3004/api/turash/images/similar`, {
+    return fetch(`http://localhost:3003/api/turash/images/similar`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
