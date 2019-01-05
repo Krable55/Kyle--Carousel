@@ -15,14 +15,12 @@ class SliderComponent extends React.Component {
   }
 
   componentDidMount() {
-   this.getSimilarCarsByMake(this.props.make, 7)
-    .then(res => this.setState({
-      similar: res
-    }))
+    console.log(this.props.make);
+    this.getSimilarCarsByMake(this.props.make, 7);
   }
 
   //get similar cars for second  carousel
-   getSimilarCarsByMake(type, limit) {
+  getSimilarCarsByMake(type, limit) {
     return fetch(`http://localhost:3003/api/turash/images/similar`, {
       method: 'POST',
       headers: {
@@ -32,10 +30,11 @@ class SliderComponent extends React.Component {
     })
       .then(res => (res.ok ? res : new Error('ERROR fetching similar cars by make')))
       .then(res => res.json())
+      .then(res => this.setState({ similar: res }));
   }
 
   render() {
-    console.log('SIMILAR',this.state.similar)
+    console.log('SIMILAR', this.state.similar);
     const settings = {
       dots: false,
       infinite: true,
@@ -61,9 +60,15 @@ class SliderComponent extends React.Component {
         <div id="mainSliderContainer">
           <Slider {...settings}>
             {this.state.images
-              ? this.state.images.map((image, i) => (
-                 image.url && <div key={i}> <img src={image.url} /> </div>
-                ))
+              ? this.state.images.map(
+                  (image, i) =>
+                    image.url && (
+                      <div key={i}>
+                        {' '}
+                        <img src={image.url} />{' '}
+                      </div>
+                    )
+                )
               : null}
           </Slider>
         </div>
@@ -74,17 +79,25 @@ class SliderComponent extends React.Component {
           <Slider {...similarSliderSettings}>
             {this.state.similar &&
               this.state.similar.map((similarCar, i) => (
-
                 <div className="similarSlide" key={i}>
-                {console.log(similarCar)}
-                  <a href={`${window.location.pathname.split('/')[0]}/${similarCar.thumb.split('/')[4]}/`}>
+                  {console.log(similarCar)}
+                  <a
+                    href={`${window.location.pathname.split('/')[0]}/${
+                      similarCar.thumb.split('/')[4]
+                    }/`}
+                  >
                     <img src={similarCar.thumb} />
                   </a>
-                </div>))}
-              {this.state.random.length > 0 &&
-                this.state.random.map((randomCar, i) => (
+                </div>
+              ))}
+            {this.state.random &&
+              this.state.random.map((randomCar, i) => (
                 <div className="similarSlide" key={i}>
-                  <a href={`${window.location.pathname.split('/')[0]}/${randomCar[1].split('/')[4]}/`}>
+                  <a
+                    href={`${window.location.pathname.split('/')[0]}/${
+                      randomCar[1].split('/')[4]
+                    }/`}
+                  >
                     <img src={randomCar[1]} />
                   </a>
                 </div>

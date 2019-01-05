@@ -28,7 +28,7 @@ app.get('/api/turash/images/:id', (req, res) => {
       const query = {
         id: Number(req.params.id)
       };
-      const cursor = collection.find(query)
+      const cursor = collection.find(query);
       cursor.forEach(
         (doc, err) => {
           assert.equal(null, err);
@@ -52,22 +52,24 @@ app.post(`/api/turash/images/similar`, (req, res) => {
       const db = client.db('TuRash');
       const collection = db.collection('testData');
       const query = [
-  {
-    $match: {
-      make: req.body.make
-    }
-  }, {
-    $match: {
-      thumb: {
-        $type: 'string'
-      }
-    }
-  }, {
-    $sample: {
-      size: req.body.limit
-    }
-  }
-]
+        {
+          $match: {
+            make: req.body.make
+          }
+        },
+        {
+          $match: {
+            thumb: {
+              $type: 'string'
+            }
+          }
+        },
+        {
+          $sample: {
+            size: req.body.limit
+          }
+        }
+      ];
       const cursor = collection.aggregate(query);
       cursor.forEach(
         (doc, err) => {
@@ -84,33 +86,3 @@ app.post(`/api/turash/images/similar`, (req, res) => {
   );
   console.log(make);
 });
-
-// app.post(`/api/turash/images/varied`, (req, res) => {
-//   const varied = [];
-//   console.log('MAKE', req.body);
-//   client.connect(
-//     url,
-//     (err, client) => {
-//       const db = client.db('TuRash');
-//       const collection = db.collection('testData2');
-//       const query = [{
-//         $match: {
-//         make: req.body.make, 
-//         thumb: {$type: 'string'}}}, {
-//         $sample: {size: req.body.limit}
-//       }]
-//       const cursor = collection.aggregate(query).project({ images: 1, _id: 1 });
-//       cursor.forEach(
-//         (doc, err) => {
-//           assert.equal(null, err);
-//           varied.push(doc);
-//         },
-//         err => {
-//           client.close();
-//           res.json(varied);
-//         }
-//       );
-//     }
-//   );
-//   console.log(varied);
-// });
