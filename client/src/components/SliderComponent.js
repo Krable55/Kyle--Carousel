@@ -9,27 +9,21 @@ class SliderComponent extends React.Component {
       images: this.props.images,
       activeSlide: 0,
       activeSlide2: 0,
-      similar: [],
       random: this.props.random
     };
     this.getSimilarCarsByMake = this.getSimilarCarsByMake.bind(this);
   }
-  componentDidUpdate() {
-    console.log('updated')
-  }
-  // }
 
   componentDidMount() {
-
-    console.log(this.props.make)
-    console.log('Slider mounted', this.props.make)
-    this.getSimilarCarsByMake(this.props.make, 7).then(res => console.log( res))
-    // this.getVariety(this.props.make, 1);
+   this.getSimilarCarsByMake(this.props.make, 7)
+    .then(res => this.setState({
+      similar: res
+    }))
   }
 
   //get similar cars for second  carousel
-  getSimilarCarsByMake(type, limit) {
-    return fetch(`http://localhost:3004/api/turash/images/similar`, {
+   getSimilarCarsByMake(type, limit) {
+    return fetch(`http://localhost:3003/api/turash/images/similar`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -38,41 +32,10 @@ class SliderComponent extends React.Component {
     })
       .then(res => (res.ok ? res : new Error('ERROR fetching similar cars by make')))
       .then(res => res.json())
-      .then(res => {
-        console.log('GET SIMILAR', res);
-      })
   }
 
-  //Get randomly selected images from other makes of car
-  // getVariety(type, limit) {
-  //   return fetch(`http://localhost:3004/api/turash/images/varied`, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({ make: type, limit: limit })
-  //   })
-  //     .then(res => (res.ok ? res : new Error('ERROR fetching similar cars by make')))
-  //     .then(res => res.json())
-  //     .then(res => {
-  //       let test = [];
-  //       console.log('VARIETY', res);
-  //       res.forEach(car => {
-  //         let random = Math.floor(Math.random() * car.images.length);
-  //         let info = car.images[random].split('/').slice(4, 6);
-  //         test.push({
-  //           Key: info[1],
-  //           id: info[0],
-  //           make: car._id,
-  //           url: car.images[random]
-  //         });
-  //       });
-  //       return test;
-  //     })
-  //     .then(test => this.setState({ similar: test }));
-  // }
   render() {
-    console.log(this.state.random)
+    console.log('SIMILAR',this.state.similar)
     const settings = {
       dots: false,
       infinite: true,
@@ -109,10 +72,18 @@ class SliderComponent extends React.Component {
         </div>
         <div className="slider slider-nav" id="similar">
           <Slider {...similarSliderSettings}>
-            {this.state.random.length > 0 &&
-              this.state.random.map((randomCar, i) => (
+            {this.state.similar &&
+              this.state.similar.map((similarCar, i) => (
+
                 <div className="similarSlide" key={i}>
-                {console.log(randomCar)}
+                {console.log(similarCar)}
+                  <a href={`${window.location.pathname.split('/')[0]}/${similarCar.thumb.split('/')[4]}/`}>
+                    <img src={similarCar.thumb} />
+                  </a>
+                </div>))}
+              {this.state.random.length > 0 &&
+                this.state.random.map((randomCar, i) => (
+                <div className="similarSlide" key={i}>
                   <a href={`${window.location.pathname.split('/')[0]}/${randomCar[1].split('/')[4]}/`}>
                     <img src={randomCar[1]} />
                   </a>

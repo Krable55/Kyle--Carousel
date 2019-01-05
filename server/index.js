@@ -51,12 +51,23 @@ app.post(`/api/turash/images/similar`, (req, res) => {
     (err, client) => {
       const db = client.db('TuRash');
       const collection = db.collection('testData');
-      const query = [{
-        $match: {
-        make: req.body.make, 
-        thumb: {$type: 'string'}}}, {
-        $sample: {size: req.body.limit}
-      }]
+      const query = [
+  {
+    $match: {
+      make: req.body.make
+    }
+  }, {
+    $match: {
+      thumb: {
+        $type: 'string'
+      }
+    }
+  }, {
+    $sample: {
+      size: req.body.limit
+    }
+  }
+]
       const cursor = collection.aggregate(query);
       cursor.forEach(
         (doc, err) => {
