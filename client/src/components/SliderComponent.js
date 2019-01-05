@@ -87,6 +87,13 @@ class SliderComponent extends React.Component {
                     }/`}
                   >
                     <img src={similarCar.thumb} />
+                    <span className="carDescription">
+                      <div>
+                        <h2>
+                          {similarCar.make.charAt(0).toUpperCase() + similarCar.make.substr(1)}
+                        </h2>
+                      </div>
+                    </span>
                   </a>
                 </div>
               ))}
@@ -99,6 +106,11 @@ class SliderComponent extends React.Component {
                     }/`}
                   >
                     <img src={randomCar[1]} />
+                    <span className="carDescription">
+                      <div>
+                        <h2>{randomCar[0].charAt(0).toUpperCase() + randomCar[0].substr(1)}</h2>
+                      </div>
+                    </span>
                   </a>
                 </div>
               ))}

@@ -10,7 +10,7 @@ class Carousel extends React.Component {
   }
 
   componentDidMount() {
-    let targetID = window.location.pathname.split('/')[2];
+    let targetID = window.location.pathname.slice(1, window.location.pathname.length - 1);
     targetID ? (this.state.id = targetID) : (this.state.id = 15);
 
     this.getCarById(this.state.id).then(res => {
